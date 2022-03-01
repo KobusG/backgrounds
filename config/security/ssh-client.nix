@@ -26,7 +26,7 @@ in
     matchBlocks = {
       "10.0.1.150" = {
         hostname = "10.0.1.150";
-        user = "jkachmar";
+        user = "kobus";
       } // optionalAttrs isDarwin {
         identityFile = [ "~/.ssh/id_enigma" ];
       } // optionalAttrs isLinux {

@@ -56,7 +56,7 @@
 
 
       # TODO: Abstract this out so it's compatible across NixOS & macOS.
-      # xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "/Users/jkachmar/.config/dotfiles/config/development/neovim/lua";
+      # xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "/Users/kobus/.config/dotfiles/config/development/neovim/lua";
       xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/dotfiles/config/development/neovim/lua";
     };
 }

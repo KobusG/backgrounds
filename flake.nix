@@ -1,5 +1,5 @@
 {
-  description = "jkachmar's personal dotfiles and machine configurations.";
+  description = "kobus's personal dotfiles and machine configurations.";
 
   inputs = {
     ################
@@ -100,6 +100,8 @@
         enigma = mkNixOSConfiguration "enigma" "x86_64-linux";
         kraftwerk = mkNixOSConfiguration "kraftwerk" "x86_64-linux";
         star-platinum = mkNixOSConfiguration "star-platinum" "x86_64-linux";
+        yoga = mkNixOSConfiguration "yoga" "x86_64-linux";
+
       };
     };
 }

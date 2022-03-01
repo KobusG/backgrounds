@@ -26,10 +26,10 @@
   };
 
   primary-user = {
-    name = "jkachmar";
+    name = "kobus";
     git.user.name = config.primary-user.name;
-    git.user.email = "git@jkachmar.com";
-    passwordFile = "/secrets/passwords/kraftwerk/jkachmar";
+    git.user.email = "git@kobus.com";
+    passwordFile = "/secrets/passwords/kraftwerk/kobus";
     extraGroups = [ "docker" ];
   };
 
@@ -103,7 +103,7 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
-  security.pam.services.jkachmar.enableKwallet = true;
+  security.pam.services.kobus.enableKwallet = true;
   # Fingerprint reader support.
   services.fprintd.enable = true;
 
@@ -131,4 +131,3 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.11";
 }
-

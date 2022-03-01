@@ -10,10 +10,10 @@
     networking.hostName = "crazy-diamond";
 
     primary-user = {
-      name = "jkachmar";
+      name = "kobus";
       git.user.name = config.primary-user.name;
-      git.user.email = "git@jkachmar.com";
-      user.home = /Users/jkachmar;
+      git.user.email = "git@kobus.com";
+      user.home = /Users/kobus;
     };
 
     # TODO: Abstract this out.
@@ -24,8 +24,8 @@
     nix.buildMachines = [
       {
         hostName = "10.0.1.150";
-        sshUser = "jkachmar";
-        sshKey = "/Users/jkachmar/.ssh/id_enigma";
+        sshUser = "kobus";
+        sshKey = "/Users/kobus/.ssh/id_enigma";
         systems = [ "x86_64-linux" ];
         maxJobs = 2;
       }

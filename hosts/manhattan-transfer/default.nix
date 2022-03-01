@@ -11,10 +11,10 @@
     networking.hostName = "manhattan-transfer";
 
     primary-user = {
-      name = "jkachmar";
+      name = "kobus";
       git.user.name = config.primary-user.name;
-      git.user.email = "git@jkachmar.com";
-      user.home = /Users/jkachmar;
+      git.user.email = "git@kobus.com";
+      user.home = /Users/kobus;
     };
 
     homebrew = {

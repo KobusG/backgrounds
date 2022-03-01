@@ -19,5 +19,5 @@
   ];
 
   # TODO: Abstract this out to the `primary-user` configuration.
-  security.pam.services.jkachmar.enableKwallet = true;
+  security.pam.services.kobus.enableKwallet = true;
 }

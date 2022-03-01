@@ -2,31 +2,30 @@
 
 {
   imports = [
-    # NixOS base configuration profile.
-    ../../profiles/nixos/base.nix
-
-    # Home server service configuration.
-    ../../config/services/nginx.nix
-    ../../config/services/dns/ddclient.nix
-    ../../config/services/dns/dnscrypt-proxy.nix
-    ../../config/services/dns/podman-pihole.nix
-    ../../config/services/downloads/sabnzbd.nix
-    ../../config/services/media/hardware-acceleration.nix
-    ../../config/services/media/plex
-    ../../config/services/media/radarr.nix
-    ../../config/services/media/sonarr.nix
-
+    # NixOS desktop configuration profile.
+    ../../profiles/nixos/desktop.nix
     # Machine-specific hardware configuration.
     ./hardware.nix
   ];
 
   #############################################################################
+  # Machine-specific global packages.
+  #############################################################################
+  environment.systemPackages = with pkgs; [
+    # NOTE: Something's messed up with the Blue Yeti Nano, so its gain needs
+    # to be manually adjusted.
+    #
+    # TODO: Look into 'pipewire' as an alternative to 'pulseaudio' which might
+    # help improve the overall audio situation...
+    #
+    # ...or just ditch Linux and switch back to macOS, the desktop experience
+    # is absolutely fucking miserable.
+    pavucontrol
+  ];
+
+  #############################################################################
   # System user configuration.
   #############################################################################
-  # XXX: Would it be better to explicitly add 'NOPASSWD' for my username in
-  # 'security.sudo.extraRules'?
-  security.sudo.wheelNeedsPassword = false;
-
   # TODO: All deploys should use immutable users where possible, so this
   # should be a part of the base nixos config module.
   users.mutableUsers = false;
@@ -34,32 +33,22 @@
   # FIXME: Change this to a different password from the `primary-user`.
   # TODO: Source this from a file in '/secrets'.
   users.users.root.initialHashedPassword =
-    "$6$8IEIbo7aITp8$5A68B049UisI4S5HTMgsCZ24aZf4QsoC.cOpOLZSrpzostOCOqosm2veCq0iMQy9sWb5GP5BC.N3EcjI6Vphh0";
+    "$6$uOrKO2alBMBCWDah$4LLdzhDQFKyOgyqXrmxich9HAj051kg/CwyzFniYcA9YWAdxkPMaqO/FOqvadF0LMeECLQhapmuW3N85GlCfX1";
 
   #############################################################################
   # Primary user configuration.
   #############################################################################
   primary-user = {
     name = "kobus";
-    email = "me@kobus.com";
     git.user.name = config.primary-user.name;
     git.user.email = "git@kobus.com";
-
-    # The primary user should be able to administrate all media & downloads.
-    extraGroups = [ "downloads" ];
 
     # FIXME: Change this to a different password from the root user.
     # TODO: Source this from a file in '/secrets'.
     initialHashedPassword =
-      "$6$8IEIbo7aITp8$5A68B049UisI4S5HTMgsCZ24aZf4QsoC.cOpOLZSrpzostOCOqosm2veCq0iMQy9sWb5GP5BC.N3EcjI6Vphh0";
-
-    # TODO: Extract this out into some shared set of known public keys.
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICrZAwektbexTFUtSn0vuCHP6lvTvA/jdOb+SF5TD9VA me@kobus.com"
-    ];
-
+      "$6$uOrKO2alBMBCWDah$4LLdzhDQFKyOgyqXrmxich9HAj051kg/CwyzFniYcA9YWAdxkPMaqO/FOqvadF0LMeECLQhapmuW3N85GlCfX1";
     home-manager.home.packages = with pkgs; [
-      bind.dnsutils
+      docker-compose # Hasura development tooling.
     ];
   };
 
@@ -68,55 +57,50 @@
   #############################################################################
 
   environment.etc = {
-    "nixos".source = "/persist/etc/nixos";
+    # TODO: Check if this can use the `home-manager` XDG home stuff.
+    "nixos".source = "${config.primary-user.home.directory}/.config/dotfiles";
+    "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections/";
+    "docker/key.json".source = "/persist/etc/docker/key.json";
+
+    # Necessary to build GraphQL Engine with MSSQL support.
+    #
+    # NOTE: Ensure that the shell config for the GraphQL Engine repo uses the
+    # same package set as the system to source the ODBC driver stuff.
+    "odbcinst.ini".text = ''
+      [ODBC Driver 17 for SQL Server]
+      Driver          = ${pkgs.unixODBCDrivers.msodbcsql17}/lib/libmsodbcsql-17.7.so.1.1
+    '';
   };
+
+  systemd.tmpfiles.rules = [
+    "L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
+    "L /var/lib/docker    - - - - /persist/var/lib/docker"
+  ];
 
   #############################################################################
   # Machine identification.
   #############################################################################
   # TODO: Source the following two values from files in '/persist'.
-  networking.hostId = "8425e349"; # Required by ZFS.
-  environment.etc."machine-id".text = "4b632b7bbd1940ecaceab8ecc74be662";
+  # networking.hostId = "yoga"; # Required by ZFS.
+  # environment.etc."machine-id".text = "0aaab60e7c4a49d49c953e4972dbe443";
 
   #############################################################################
   # Networking.
   #############################################################################
   networking = {
-    hostName = "enigma";
-    domain = "thempire.dev";
+    hostName = "yoga";
 
+    firewall.enable = true;
     interfaces = {
-      eno1.useDHCP = true;
-      wlp0s20f3.useDHCP = true;
+      wlp1s0.useDHCP = true;
     };
+    networkmanager.enable = true;
 
-    firewall = {
-      enable = true;
-      allowedUDPPorts = [
-        # Wireguard.
-        51820
-      ];
-    };
-  };
-
-  # Wireguard server.
-  #
-  # TODO: Extract this (and the above firewall settings) out into a module.
-  boot.kernel.sysctl = {
-    "net.ipv4.ip_forward" = 1;
-  };
-
-  networking.wireguard = {
-    enable = true;
-    interfaces.enigma = {
+    wireguard.interfaces.wg0 = {
       generatePrivateKeyFile = true;
-      privateKeyFile = "/secrets/wireguard/enigma";
-
-      ips = [ ];
-      peers = [ ];
+      privateKeyFile = "/secrets/wireguard/wg0";
     };
   };
-
 
   #############################################################################
   # System.
