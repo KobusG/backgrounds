@@ -1,7 +1,7 @@
 ###################################
 # NixOS X11 server configuration. #
 ###################################
-{ ... }:
+{ pkgs, ... }:
 
 {
   # Install and enable Vulkan.
@@ -11,11 +11,11 @@
     enable = true;
     driSupport = true;
     # XXX: Only if using Intel graphics.
-    # extraPackages = with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-compute-runtime ];  
+    extraPackages = with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-compute-runtime ];  
 
     driSupport32Bit = true;
     # XXX: Only if using Intel graphics.
-    # extraPackages32 = with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-compute-runtime ];  
+    extraPackages32 = with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-compute-runtime ];  
   };
 
   # Enable X11 + Nvidia
@@ -26,6 +26,6 @@
 
     # TODO: Verify that this is necessary.
     # TODO: This isn't machine-agnostic.
-    videoDrivers = [ "nvidia" ];
+    # videoDrivers = [ "nvidia" ];
   };
 }

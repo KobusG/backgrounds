@@ -15,6 +15,14 @@ in
   environment.systemPackages = with pkgs; [
     # Misc. common programs without a better place to go.
     curl
+    file
+    git
+    git-lfs
+    python3
+    vscode
+    sublime4
+    p7zip
+    terminator
     libvterm-neovim
     nixpkgs-fmt
     vim
@@ -29,6 +37,7 @@ in
     fd
     findutils
     htop
+    bottom
     mosh
     ripgrep
     shellcheck

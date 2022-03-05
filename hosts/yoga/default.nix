@@ -59,17 +59,9 @@
   environment.etc = {
     # TODO: Check if this can use the `home-manager` XDG home stuff.
     "nixos".source = "${config.primary-user.home.directory}/.config/dotfiles";
-    "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections/";
-    "docker/key.json".source = "/persist/etc/docker/key.json";
+    # "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections/";
 
-    # Necessary to build GraphQL Engine with MSSQL support.
-    #
-    # NOTE: Ensure that the shell config for the GraphQL Engine repo uses the
-    # same package set as the system to source the ODBC driver stuff.
-    "odbcinst.ini".text = ''
-      [ODBC Driver 17 for SQL Server]
-      Driver          = ${pkgs.unixODBCDrivers.msodbcsql17}/lib/libmsodbcsql-17.7.so.1.1
-    '';
+
   };
 
   systemd.tmpfiles.rules = [
@@ -90,16 +82,12 @@
   networking = {
     hostName = "yoga";
 
-    firewall.enable = true;
+    # firewall.enable = true;
     interfaces = {
       wlp1s0.useDHCP = true;
     };
     networkmanager.enable = true;
 
-    wireguard.interfaces.wg0 = {
-      generatePrivateKeyFile = true;
-      privateKeyFile = "/secrets/wireguard/wg0";
-    };
   };
 
   #############################################################################

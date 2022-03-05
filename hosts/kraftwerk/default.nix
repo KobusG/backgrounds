@@ -14,9 +14,6 @@
       ./hardware.nix
     ];
 
-  # # Localization override.
-  # time.timeZone = "US/Mountain";
-
   ##########
   # Users. #
   ##########

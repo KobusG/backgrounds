@@ -18,6 +18,17 @@
     spectacle
   ];
 
+  # primary-user.home-manager = {
+  #   services.random-background = {
+  #     enable = true;
+  #     imageDirectory = "/persist/etc/nixos/backgrounds";
+  #     interval = "5m";
+  #   };
+  # };
+
+  # needed for store VSCode auth token
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
   # TODO: Abstract this out to the `primary-user` configuration.
   security.pam.services.kobus.enableKwallet = true;
 }

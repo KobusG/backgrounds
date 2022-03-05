@@ -101,7 +101,6 @@
         kraftwerk = mkNixOSConfiguration "kraftwerk" "x86_64-linux";
         star-platinum = mkNixOSConfiguration "star-platinum" "x86_64-linux";
         yoga = mkNixOSConfiguration "yoga" "x86_64-linux";
-
       };
     };
 }
