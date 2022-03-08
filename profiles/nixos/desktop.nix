@@ -6,14 +6,14 @@
     # System configuration modules.
     ../../config/system/fonts/nixos.nix
     # XXX: Contains NVIDIA-specific config.
-    # ../../config/system/nixos/virtualization.nix
+    ../../config/system/nixos/virtualization.nix
     # Security configuration modules.
     # ../../config/security/gpg.nix
     # Shell configuration modules.
-    # ../../config/shell/alacritty.nix
+    ../../config/shell/alacritty.nix
     ../../config/shell/bash.nix
     # ../../config/shell/htop.nix
-    # ../../config/shell/fish/nixos.nix
+    ../../config/shell/fish/nixos.nix
     # ../../config/shell/starship.nix
     # Desktop configuration modules.
     ../../config/desktop/nixos/applications.nix
@@ -23,8 +23,8 @@
     ../../config/desktop/nixos/xserver.nix
     # Development configuration modules.
     # ../../config/development/bat.nix
-    # ../../config/development/direnv.nix
-    # ../../config/development/neovim
+    ../../config/development/direnv.nix
+    ../../config/development/neovim
     # ../../config/development/vscode
   ];
 }

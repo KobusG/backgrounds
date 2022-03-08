@@ -5,7 +5,7 @@
 
 {
 
-  services.dropbox.enable
+
   primary-user = {
     home-manager.home.packages = (with pkgs ; [
       # slack
