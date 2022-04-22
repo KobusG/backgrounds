@@ -1,4 +1,0 @@
-# Nix build artifacts.
-result 
-# `nix-direnv` cache directory.
-.direnv
